@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Model Prediction</title>
+</head>
+<body>
+    <h1>Test Model Prediction</h1>
+    <label for="sentenceInput">Enter a sentence:</label>
+    <input type="text" id="sentenceInput" placeholder="Type your sentence here">
+    <button onclick="getPrediction()">Submit</button>
+
+    <h2>Prediction:</h2>
+    <div id="predictionOutput"></div>
+
+    <script>
+        async function getPrediction() {
+            // Get the input sentence from the webpage
+            const sentence = document.getElementById("sentenceInput").value;
+
+            // Check if the input is empty
+            if (!sentence) {
+                document.getElementById("predictionOutput").innerText = "Please enter a sentence.";
+                return;
+            }
+
+            // Send the POST request to the Flask backend
+            const response = await fetch('http://127.0.0.1:5000/predict', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ sentence: sentence }),  // Send the input as JSON
+            });
+
+            // Parse the JSON response
+            const data = await response.json();
+
+            // Display the prediction on the webpage
+            if (response.ok) {
+                document.getElementById("predictionOutput").innerText = `Translation: ${data.predicted_translation}`;
+            } else {
+                document.getElementById("predictionOutput").innerText = `Error: ${data.error}`;
+            }
+        }
+    </script>
+</body>
+</html>
