@@ -16,28 +16,23 @@
 
     <script>
         async function getPrediction() {
-            // Get the input sentence from the webpage
             const sentence = document.getElementById("sentenceInput").value;
 
-            // Check if the input is empty
             if (!sentence) {
                 document.getElementById("predictionOutput").innerText = "Please enter a sentence.";
                 return;
             }
 
-            // Send the POST request to the Flask backend
             const response = await fetch('http://127.0.0.1:5000/predict', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ sentence: sentence }),  // Send the input as JSON
+                body: JSON.stringify({ sentence: sentence }), 
             });
 
-            // Parse the JSON response
             const data = await response.json();
 
-            // Display the prediction on the webpage
             if (response.ok) {
                 document.getElementById("predictionOutput").innerText = `Translation: ${data.predicted_translation}`;
             } else {
